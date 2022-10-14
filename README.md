@@ -32,8 +32,9 @@ S3_REGION="us-east-1"
 ```
 
 ### Deklarasi Class
-
-    $s3 = (new S3());
+```php
+	$s3 = (new S3());
+```
 
 ### Create Bucket
 ```php
