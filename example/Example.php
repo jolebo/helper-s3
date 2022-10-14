@@ -11,14 +11,23 @@ class Playground extends Base_Controller {
 	}
 
 
+	public function createBucketMinio(){
+		$s3 = (new S3());	
+		$bucketName = "test_bucket";
+
+		$s3->createBucket($bucketName);
+	}
+
 	public function uploadToMinio(){
 		$image = convertImageToBase64($_FILES["gambar"]);
+		$path = 'foto/';
+		$filename = gen_uuid().$image["ext"];
 
 		$s3 = (new S3());
 
-		$opr = $s3->putObject([
+		$opr = $s3->saveFile([
 			"body"=> $image["data"],
-			"file_name"=> 'foto/'.gen_uuid().$image["ext"],
+			"file_name"=> $path.$filename,
 			"contentType"=> $image["mimeType"]
 		]);
 
@@ -29,7 +38,7 @@ class Playground extends Base_Controller {
 	public function deleteFromMinio($filename = ""){
 		$s3 = (new S3());
 
-		$opr = $s3->deleteObject([
+		$opr = $s3->deleteFile([
 			"file_name" => $filename
 		]);
 
@@ -38,19 +47,20 @@ class Playground extends Base_Controller {
 		echo "</pre>";
 	}
 
-	public function getImageFromMinio($id = ""){
+	public function getImageFromMinio(){
 		$s3 = (new S3());
-		$data = $this->db->get_where('minio',["minio_id" => $id])->row_array();
-		if($data){
-			$opr = $s3->getObject([
-				"file_name" => $data["minio_filepath"].$data["minio_filename"],
-			]);
+		$filepath = 'foto/';
+		$filename = "gambar.png";
+		
+		$opr = $s3->getFile([
+			"file_name" => $filepath.$filename,
+		]);
 
-			$contentDIsposition = $opr["ContentType"] == "image/jpeg" || $opr["ContentType"] == "image/png" ? "inline" : "attachment";
+		/*jika gambar langsung tampilkan selain itu download */
+		$contentDIsposition = $opr["ContentType"] == "image/jpeg" || $opr["ContentType"] == "image/png" ? "inline" : "attachment";
 
-			header('Content-Type: ' . $opr["ContentType"]);
-			header('Content-Disposition: '.$contentDIsposition.";filename=\"{$data["minio_filename"]}\"");
-			echo $opr["Body"];
-		}
+		header('Content-Type: ' . $opr["ContentType"]);
+		header('Content-Disposition: '.$contentDIsposition.";filename=\"{$filename}\"");
+		echo $opr["Body"];
 	}
 }

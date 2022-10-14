@@ -5,11 +5,6 @@ use Aws\S3\S3Client;
 class S3
 {
 	public $s3;
-	// private $s3_bucket = $this->config->item("s3_bucket");
-	// private $s3_region = $this->config->item("s3_region");
-	// private $s3_host = $this->config->item("s3_host");
-	// private $s3_access_key = $this->config->item("s3_access_key");
-	// private $s3_secret_key = $this->config->item("s3_secret_key");
 	function __construct()
 	{
 		/*create connection*/
@@ -34,7 +29,7 @@ class S3
 	}
 
 	/**
-	 *  Put object to bucket storage
+	 *  save file to object storage
 	 * 
 	 *  ACL : $config["acl"] private|public-read|public-read-write|authenticated-read|aws-exec-read|bucket-owner-read|bucket-owner-full-control // permission
 	 * 	Body : $config["body"] // file yang akan diupload
@@ -44,7 +39,7 @@ class S3
 	 * 	ContentType : $config["contentType"]
 	 **/
 
-	function putObject($config = []){
+	function saveFile($config = []){
 		$opr = $this->s3->putObject([
 			"ACL" => isset($config["acl"]) ? $config["acl"] : "public-read",
 			// "Body" => $config["body"],
@@ -58,20 +53,25 @@ class S3
 	}
 
 	/**
-	 * To delete object from bucket storage
+	 * To delete file from object storage
 	 * 
 	 * Bucket : $config["bucket"] 
 	 * Key : $config["file_name"]
 	 **/
 
-	function deleteObject($config = []){
+	function deleteFile($config = []){
 		$opr = $this->s3->deleteObject([
 			"Bucket" => isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],
 			"Key" => $config["file_name"]
 		]);
 	}
 
-	function getObject($config = []){
+	/**
+	 * to get file from object storage
+	 * Bucket : $config["bucket"],
+	 * Key : $config["file_name"]
+	 **/
+	function getFile($config = []){
 		$opr = $this->s3->getObject([
 			"Bucket" => isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],
 			"Key" => $config["file_name"],
