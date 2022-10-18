@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 use Aws\S3\S3Client;
 
-class Playground extends Base_Controller {
+class Example extends Base_Controller {
 
 	public function __construct()
 	{
@@ -56,11 +56,18 @@ class Playground extends Base_Controller {
 			"file_name" => $filepath.$filename,
 		]);
 
-		/*jika gambar langsung tampilkan selain itu download */
-		$contentDIsposition = $opr["ContentType"] == "image/jpeg" || $opr["ContentType"] == "image/png" ? "inline" : "attachment";
+		if($opr["isExists"]){
+			/*jika gambar langsung tampilkan selain itu download */
+			$contentDisposition = $opr["ContentType"] == "image/jpeg" || $opr["ContentType"] == "image/png" ? "inline" : "attachment";
 
-		header('Content-Type: ' . $opr["ContentType"]);
-		header('Content-Disposition: '.$contentDIsposition.";filename=\"{$filename}\"");
-		echo $opr["Body"];
+			header('Content-Type: ' . $opr["ContentType"]);
+			header('Content-Disposition: '.$contentDisposition.";filename=\"{$filename}\"");
+			echo $opr["Body"];
+		}
+
+		/* atau bisa diconvert ke base64  */
+		if($opr["isExists"]){
+			$data = "data:{$opr["ContentType"]};base64," . base64_encode($opr["Body"]);
+		}
 	}
 }
