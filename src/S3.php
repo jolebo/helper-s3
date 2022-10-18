@@ -60,10 +60,14 @@ class S3
 	 **/
 
 	function deleteFile($config = []){
-		$opr = $this->s3->deleteObject([
-			"Bucket" => isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],
-			"Key" => $config["file_name"]
-		]);
+		$checkObject = $this->s3->doesObjectExist(isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],$config["file_name"]);
+
+		if($checkObject){
+			$opr = $this->s3->deleteObject([
+				"Bucket" => isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],
+				"Key" => $config["file_name"]
+			]);
+		}
 	}
 
 	/**
@@ -72,11 +76,22 @@ class S3
 	 * Key : $config["file_name"]
 	 **/
 	function getFile($config = []){
-		$opr = $this->s3->getObject([
-			"Bucket" => isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],
-			"Key" => $config["file_name"],
-			// "ResponseContentDisposition" => "inline",
-		]);
+		$checkObject = $this->s3->doesObjectExist(isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],$config["file_name"]);
+
+		$opr = [
+			"isExists" => false,
+			"Body" => [],
+			"ContentType" => "",
+		];
+
+		if($checkObject){
+			$opr = $this->s3->getObject([
+				"Bucket" => isset($config["bucket"]) ? $config["bucket"] : $_ENV["S3_BUCKET"],
+				"Key" => $config["file_name"],
+				// "ResponseContentDisposition" => "inline",
+			]);
+			$opr["isExists"] = true;
+		}
 		return $opr;
 	}
 
