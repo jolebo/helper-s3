@@ -76,10 +76,28 @@ S3_REGION="us-east-1"
 	   "file_name" => $filepath.$filename,
    ]);
 
-	/*jika gambar langsung tampilkan selain itu download */
-	$contentDIsposition = $opr["ContentType"] == "image/jpeg" || $opr["ContentType"] == "image/png" ? "inline" : "attachment";
+	if($opr["isExists"]){
+		/*jika gambar langsung tampilkan selain itu download */
+		$contentDisposition = $opr["ContentType"] == "image/jpeg" || $opr["ContentType"] == "image/png" ? "inline" : "attachment";
 
-	header('Content-Type: ' . $opr["ContentType"]);
-	header('Content-Disposition: '.$contentDIsposition.";filename=\"{$filename}\"");
-	echo $opr["Body"];
+		header('Content-Type: ' . $opr["ContentType"]);
+		header('Content-Disposition: '.$contentDisposition.";filename=\"{$filename}\"");
+		echo $opr["Body"];
+	}
+```
+***Keterangan*** atau bisa langsung diconvert ke base64
+
+```php
+   $s3 = (new S3());
+   $filepath = 'foto/';
+   $filename = "gambar.png";
+		
+   $opr = $s3->getFile([
+	   "file_name" => $filepath.$filename,
+   ]);
+
+   	$data = "";
+	if($opr["isExists"]){
+		$data = "data:{$opr["ContentType"]};base64," . base64_encode($opr["Body"]);
+	}
 ```
