@@ -3,7 +3,7 @@
 
 ***Helper S3** adalah sebuah kelas yang mengextend [aws s3](https://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html), dengan tujuan untuk menyimpan file didalam object storage.*
 
-### Feautures
+### Features
 
 1. Create Bucket
 2. Save file to object storage
