@@ -1,7 +1,7 @@
 [![Build Status](https://camo.githubusercontent.com/f5054ffcd4245c10d3ec85ef059e07aacf787b560f83ad4aec2236364437d097/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636f6e747269627574696f6e732d77656c636f6d652d627269676874677265656e2e7376673f7374796c653d666c6174)]()
 ## Helper S3
 
-***Helper S3** adalah sebuah kelas yang mengextend [aws s3](https://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html), dengan tujuan untuk menyimpan file didalam object storage.*
+***Helper S3** adalah sebuah kelas yang mengextend [aws s3](https://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html), dengan tujuan untuk menyimpan file didalam object storage.* menggunakan Codeigniter 3
 
 ### Features
 
